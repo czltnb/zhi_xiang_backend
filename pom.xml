@@ -16,7 +16,7 @@
     <description>ZhiXiang MVP authentication service</description>
 
     <properties>
-        <java.version>21</java.version>
+        <java.version>17</java.version>
     </properties>
 
     <repositories>
@@ -192,6 +192,21 @@
             <scope>test</scope>
         </dependency>
 
+      <!-- H2 内存数据库：单元测试时替代 MySQL，避免依赖外部数据库 -->
+      <dependency>
+          <groupId>com.h2database</groupId>
+          <artifactId>h2</artifactId>
+          <scope>test</scope>
+      </dependency>
+
+      <!-- MyBatis Test：提供 @MybatisTest 等测试支持 -->
+      <dependency>
+          <groupId>org.mybatis.spring.boot</groupId>
+          <artifactId>mybatis-spring-boot-starter-test</artifactId>
+          <version>3.0.3</version>
+          <scope>test</scope>
+      </dependency>
+
         <!-- Spring Security 测试：提供 MockMvc 安全测试与注解支持 -->
         <dependency>
             <groupId>org.springframework.security</groupId>
@@ -240,7 +255,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.tongji.ZhiGuangApplication</mainClass>
+                    <mainClass>com.czltnb.zhi_xiang_backend.ZhiXiangBackendApplication</mainClass>
                 </configuration>
             </plugin>
         </plugins>

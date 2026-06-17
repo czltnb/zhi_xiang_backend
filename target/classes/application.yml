@@ -1,0 +1,51 @@
+# ============================================================
+# 智响 (ZhiXiang) 后端 — 应用配置
+# 参照源项目结构，仅为本地环境差异做自定义
+# ============================================================
+
+server:
+  port: 8080
+
+spring:
+  # 排除尚未实现模块的自动配置，避免启动报错
+  # 随着模块逐个实现，逐步移除此列表
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+      - org.springframework.boot.autoconfigure.security.oauth2.resource.servlet.OAuth2ResourceServerAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
+      - org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration
+      - org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchRestClientAutoConfiguration
+      - org.springframework.boot.autoconfigure.mail.MailSenderAutoConfiguration
+      - org.springframework.ai.vectorstore.elasticsearch.autoconfigure.ElasticsearchVectorStoreAutoConfiguration
+      - org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration
+
+  # Spring AI 占位 API Key（暂未启用 AI 模块，仅用于满足自动配置条件）
+  ai:
+    openai:
+      api-key: placeholder-not-configured
+    deepseek:
+      api-key: placeholder-not-configured
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/zhiguang?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      idle-timeout: 300000
+      connection-timeout: 20000
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.czltnb.zhi_xiang_backend.user.domain
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+logging:
+  level:
+    com.czltnb.zhi_xiang_backend: DEBUG
+    org.springframework.web: INFO
