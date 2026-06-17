@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.czltnb.zhi_xiang_backend.user.mapper.UserMapperTest
--------------------------------------------------------------------------------
-Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 6.723 s -- in com.czltnb.zhi_xiang_backend.user.mapper.UserMapperTest

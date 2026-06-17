@@ -11,9 +11,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -25,10 +22,8 @@ public class GlobalExceptionHandler {
      * @return 响应体：code/message。
      */
     @ExceptionHandler(BusinessException.class)
-    public ResponseEntity<Map<String, Object>> handleBusiness(BusinessException ex) {
-        Map<String, Object> body = new HashMap<>();
-        body.put("code", ex.getErrorCode().getCode());
-        body.put("message", ex.getMessage());
+    public ResponseEntity<R<?>> handleBusiness(BusinessException ex) {
+        R<?> body = R.error(ex.getErrorCode(), ex.getMessage());
         return ResponseEntity.badRequest().body(body);
     }
 
@@ -40,14 +35,12 @@ public class GlobalExceptionHandler {
      * @return 响应体：code/message。
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, Object>> handleValidation(MethodArgumentNotValidException ex) {
+    public ResponseEntity<R<?>> handleValidation(MethodArgumentNotValidException ex) {
         String message = ex.getBindingResult().getFieldErrors().stream()
                 .findFirst()
                 .map(FieldError::getDefaultMessage)
                 .orElse(ErrorCode.BAD_REQUEST.getDefaultMessage());
-        Map<String, Object> body = new HashMap<>();
-        body.put("code", ErrorCode.BAD_REQUEST.getCode());
-        body.put("message", message);
+        R<?> body = R.error(ErrorCode.BAD_REQUEST, message);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
     }
 
@@ -58,10 +51,8 @@ public class GlobalExceptionHandler {
      * @return 响应体：code/message。
      */
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<Map<String, Object>> handleConstraintViolation(ConstraintViolationException ex) {
-        Map<String, Object> body = new HashMap<>();
-        body.put("code", ErrorCode.BAD_REQUEST.getCode());
-        body.put("message", ex.getMessage());
+    public ResponseEntity<R<?>> handleConstraintViolation(ConstraintViolationException ex) {
+        R<?> body = R.error(ErrorCode.BAD_REQUEST, ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
     }
 
@@ -73,11 +64,9 @@ public class GlobalExceptionHandler {
      * @return 响应体：code/message。
      */
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Map<String, Object>> handleGeneric(Exception ex) {
+    public ResponseEntity<R<?>> handleGeneric(Exception ex) {
         log.error("Unhandled exception", ex);
-        Map<String, Object> body = new HashMap<>();
-        body.put("code", "INTERNAL_ERROR");
-        body.put("message", "服务异常，请稍后重试");
+        R<?> body = R.error(ErrorCode.INTERNAL_ERROR);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
     }
 }

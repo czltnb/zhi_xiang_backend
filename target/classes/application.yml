@@ -11,14 +11,10 @@ spring:
   # 随着模块逐个实现，逐步移除此列表
   autoconfigure:
     exclude:
-      - org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
-      - org.springframework.boot.autoconfigure.security.oauth2.resource.servlet.OAuth2ResourceServerAutoConfiguration
-      - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
       - org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration
       - org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchRestClientAutoConfiguration
       - org.springframework.boot.autoconfigure.mail.MailSenderAutoConfiguration
       - org.springframework.ai.vectorstore.elasticsearch.autoconfigure.ElasticsearchVectorStoreAutoConfiguration
-      - org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration
 
   # Spring AI 占位 API Key（暂未启用 AI 模块，仅用于满足自动配置条件）
   ai:
@@ -38,9 +34,17 @@ spring:
       idle-timeout: 300000
       connection-timeout: 20000
 
+# ==================== Redis ====================
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password: qwe123!@#
+
+
 mybatis:
   mapper-locations: classpath:mapper/*.xml
-  type-aliases-package: com.czltnb.zhi_xiang_backend.user.domain
+  type-aliases-package: com.czltnb.zhi_xiang_backend.user.domain,com.czltnb.zhi_xiang_backend.auth.model
   configuration:
     map-underscore-to-camel-case: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
@@ -49,3 +53,11 @@ logging:
   level:
     com.czltnb.zhi_xiang_backend: DEBUG
     org.springframework.web: INFO
+
+# ==================== Auth（JWT 认证配置） ====================
+auth:
+  issuer: zhiguang
+  access-token-expiration: 900000        # 15 分钟（毫秒）
+  refresh-token-expiration: 604800000    # 7 天（毫秒）
+  public-key-path: classpath:keys/public_key.pem
+  private-key-path: classpath:keys/private_key.pem
