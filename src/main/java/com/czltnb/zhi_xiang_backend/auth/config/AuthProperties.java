@@ -2,6 +2,7 @@ package com.czltnb.zhi_xiang_backend.auth.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.core.io.Resource;
 
 
 @Data
@@ -14,7 +15,7 @@ public class AuthProperties {
     /** refresh_token 有效期（毫秒），默认 7 天 */
     private long refreshTokenExpiration = 604_800_000;
     /** RSA 公钥路径 */
-    private String publicKeyPath = "classpath:keys/public_key.pem";
+    private Resource publicKeyPath;
     /** RSA 私钥路径 */
-    private String privateKeyPath = "classpath:keys/private_key.pem";
+    private Resource privateKeyPath;
 }

@@ -4,8 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2587d415-68d1-4cef-95b7-73839cd73005" name="Changes" comment="认证模块Step1: 生成RSA密钥">
+    <list default="true" id="2587d415-68d1-4cef-95b7-73839cd73005" name="Changes" comment="认证模块Step2: 基于Redis的Refresh Token存储">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/czltnb/zhi_xiang_backend/auth/config/AuthProperties.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/czltnb/zhi_xiang_backend/auth/config/AuthProperties.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/czltnb/zhi_xiang_backend/auth/config/JwtConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/czltnb/zhi_xiang_backend/auth/config/JwtConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/czltnb/zhi_xiang_backend/auth/util/JwtUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/czltnb/zhi_xiang_backend/auth/util/JwtUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/config/AuthProperties.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/config/AuthProperties.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/config/JwtConfig.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/token/RedisRefreshTokenStore.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/token/RedisRefreshTokenStore.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/token/RefreshTokenStore.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/token/RefreshTokenStore.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/util/JwtUtil.class" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,7 +50,7 @@
     "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "Spring Boot.ZhiXiangBackendApplication.executor": "Run",
-    "git-widget-placeholder": "f69daafc",
+    "git-widget-placeholder": "eea7ed31",
     "kotlin-language-version-configured": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -112,7 +120,15 @@
       <option name="project" value="LOCAL" />
       <updated>1781716952089</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="认证模块Step2: 基于Redis的Refresh Token存储">
+      <option name="closed" value="true" />
+      <created>1781718181341</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1781718181341</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -123,6 +139,7 @@
     <MESSAGE value="pom配置文件修改" />
     <MESSAGE value="用户模块和全局异常类" />
     <MESSAGE value="认证模块Step1: 生成RSA密钥" />
-    <option name="LAST_COMMIT_MESSAGE" value="认证模块Step1: 生成RSA密钥" />
+    <MESSAGE value="认证模块Step2: 基于Redis的Refresh Token存储" />
+    <option name="LAST_COMMIT_MESSAGE" value="认证模块Step2: 基于Redis的Refresh Token存储" />
   </component>
 </project>
