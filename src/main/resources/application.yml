@@ -74,7 +74,7 @@ auth:
     min-length: 8
 
 oss:
-  endpoint: oss-cn-beijing.aliyuncs.com
+  endpoint: oss-cn-shanghai.aliyuncs.com
   access-key-id: LTAI5t7qLv45ExE5nFWBqvvM
   access-key-secret: 2FLeKKiV689GCitcPaeiwewUA6NefM
   bucket: zhixiang1023

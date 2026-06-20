@@ -4,12 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2587d415-68d1-4cef-95b7-73839cd73005" name="Changes" comment="认证模块Step6: auth的双Token逻辑补全、以及发送验证码等逻辑">
+    <list default="true" id="2587d415-68d1-4cef-95b7-73839cd73005" name="Changes" comment="OSS对象存储模块(未测试，需前端联调，且有注释需要放开)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/czltnb/zhi_xiang_backend/auth/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/czltnb/zhi_xiang_backend/auth/config/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/config/SecurityConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/config/SecurityConfig.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,7 +45,7 @@
     "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "Spring Boot.ZhiXiangBackendApplication.executor": "Run",
-    "git-widget-placeholder": "c7417697",
+    "git-widget-placeholder": "fe3d1694",
     "kotlin-language-version-configured": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -86,7 +82,7 @@
       <option name="presentableId" value="Default" />
       <updated>1781624016168</updated>
       <workItem from="1781624017343" duration="721000" />
-      <workItem from="1781931487463" duration="13791000" />
+      <workItem from="1781931487463" duration="17911000" />
     </task>
     <task id="LOCAL-00001" summary="生成指导Markdown文档">
       <option name="closed" value="true" />
@@ -160,7 +156,15 @@
       <option name="project" value="LOCAL" />
       <updated>1781941484038</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="OSS对象存储模块(未测试，需前端联调，且有注释需要放开)">
+      <option name="closed" value="true" />
+      <created>1781950756381</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1781950756381</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -188,6 +192,7 @@
     <MESSAGE value="认证模块Step4: auth登陆相关的请求、响应体" />
     <MESSAGE value="认证模块Step5: auth登陆Service逻辑" />
     <MESSAGE value="认证模块Step6: auth的双Token逻辑补全、以及发送验证码等逻辑" />
-    <option name="LAST_COMMIT_MESSAGE" value="认证模块Step6: auth的双Token逻辑补全、以及发送验证码等逻辑" />
+    <MESSAGE value="OSS对象存储模块(未测试，需前端联调，且有注释需要放开)" />
+    <option name="LAST_COMMIT_MESSAGE" value="OSS对象存储模块(未测试，需前端联调，且有注释需要放开)" />
   </component>
 </project>
