@@ -48,7 +48,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth ->
-                        oauth.jwt(Customizer.withDefaults()));
+                        oauth.jwt(Customizer.withDefaults())); //这段配置自动装配 Spring Security OAuth2 Resource Server 全套 JWT 过滤器，不需要你手动写解析 Token、提取 Header 的代码，底层自动完成。
         return http.build();
     }
 

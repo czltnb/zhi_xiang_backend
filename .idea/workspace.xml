@@ -4,55 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2587d415-68d1-4cef-95b7-73839cd73005" name="Changes" comment="认证模块Step5: auth登陆Service逻辑">
+    <list default="true" id="2587d415-68d1-4cef-95b7-73839cd73005" name="Changes" comment="认证模块Step6: auth的双Token逻辑补全、以及发送验证码等逻辑">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/czltnb/zhi_xiang_backend/auth/config/AuthConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/czltnb/zhi_xiang_backend/auth/config/AuthConfiguration.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/czltnb/zhi_xiang_backend/auth/config/AuthProperties.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/czltnb/zhi_xiang_backend/auth/config/AuthProperties.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/czltnb/zhi_xiang_backend/auth/token/RedisRefreshTokenStore.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/czltnb/zhi_xiang_backend/auth/token/RedisRefreshTokenStore.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/czltnb/zhi_xiang_backend/auth/token/RefreshTokenStore.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/czltnb/zhi_xiang_backend/auth/token/RefreshTokenStore.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/czltnb/zhi_xiang_backend/auth/verification/VerificationCheckResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/czltnb/zhi_xiang_backend/auth/verification/VerificationCheckResult.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/czltnb/zhi_xiang_backend/auth/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/czltnb/zhi_xiang_backend/auth/config/SecurityConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/keys/private_key.pem" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/keys/private.pem" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/keys/public_key.pem" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/keys/public.pem" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/ZhiXiangBackendApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/ZhiXiangBackendApplication.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/api/AuthController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/api/AuthController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/api/dto/AuthResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/api/dto/AuthResponse.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/api/dto/AuthUserResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/api/dto/AuthUserResponse.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/api/dto/LoginRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/api/dto/LoginRequest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/api/dto/LogoutRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/api/dto/LogoutRequest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/api/dto/PasswordResetRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/api/dto/PasswordResetRequest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/api/dto/RegisterRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/api/dto/RegisterRequest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/api/dto/SendCodeRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/api/dto/SendCodeRequest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/api/dto/SendCodeResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/api/dto/SendCodeResponse.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/api/dto/TokenRefreshRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/api/dto/TokenRefreshRequest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/api/dto/TokenResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/api/dto/TokenResponse.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/config/AuthConfiguration.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/config/AuthConfiguration.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/config/AuthProperties.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/config/AuthProperties.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/config/PemUtils.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/config/PemUtils.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/config/SecurityConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/config/SecurityConfig.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/model/ClientInfo.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/model/ClientInfo.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/model/IdentifierType.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/model/IdentifierType.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/service/AuthService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/service/AuthService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/token/RedisRefreshTokenStore.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/token/RedisRefreshTokenStore.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/token/RefreshTokenStore.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/token/RefreshTokenStore.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/token/TokenPair.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/token/TokenPair.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/util/IdentifierValidator.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/util/IdentifierValidator.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/verification/SendCodeResult.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/verification/SendCodeResult.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/verification/VerificationCheckResult.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/verification/VerificationCheckResult.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/verification/VerificationCodeStatus.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/verification/VerificationCodeStatus.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/verification/VerificationScene.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/auth/verification/VerificationScene.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/common/exception/BusinessException.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/common/exception/BusinessException.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/common/exception/ErrorCode.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/common/exception/ErrorCode.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/common/web/GlobalExceptionHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/common/web/GlobalExceptionHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/common/web/R.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/common/web/R.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/user/domain/User$UserBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/user/domain/User$UserBuilder.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/user/domain/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/user/domain/User.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/user/mapper/UserMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/user/mapper/UserMapper.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/user/service/UserService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/user/service/UserService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/user/service/impl/UserServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/czltnb/zhi_xiang_backend/user/service/impl/UserServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/keys/private_key.pem" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/keys/public_key.pem" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -84,25 +41,25 @@
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;Spring Boot.ZhiXiangBackendApplication.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;0211ff6d&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.applicationServers&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "Spring Boot.ZhiXiangBackendApplication.executor": "Run",
+    "git-widget-placeholder": "c7417697",
+    "kotlin-language-version-configured": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.applicationServers",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="ZhiXiangBackendApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="zhi_xiang_backend" />
@@ -129,7 +86,7 @@
       <option name="presentableId" value="Default" />
       <updated>1781624016168</updated>
       <workItem from="1781624017343" duration="721000" />
-      <workItem from="1781931487463" duration="9479000" />
+      <workItem from="1781931487463" duration="13791000" />
     </task>
     <task id="LOCAL-00001" summary="生成指导Markdown文档">
       <option name="closed" value="true" />
@@ -195,7 +152,15 @@
       <option name="project" value="LOCAL" />
       <updated>1781835171587</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="认证模块Step6: auth的双Token逻辑补全、以及发送验证码等逻辑">
+      <option name="closed" value="true" />
+      <created>1781941484038</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1781941484038</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -222,6 +187,7 @@
     <MESSAGE value="认证模块Step4: auth登陆相关的请求、响应体" />
     <MESSAGE value="认证模块Step4: auth登陆相关的请求、响应体" />
     <MESSAGE value="认证模块Step5: auth登陆Service逻辑" />
-    <option name="LAST_COMMIT_MESSAGE" value="认证模块Step5: auth登陆Service逻辑" />
+    <MESSAGE value="认证模块Step6: auth的双Token逻辑补全、以及发送验证码等逻辑" />
+    <option name="LAST_COMMIT_MESSAGE" value="认证模块Step6: auth的双Token逻辑补全、以及发送验证码等逻辑" />
   </component>
 </project>

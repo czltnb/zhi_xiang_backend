@@ -72,3 +72,11 @@ auth:
   password:
     bcrypt-strength: 12
     min-length: 8
+
+oss:
+  endpoint: oss-cn-beijing.aliyuncs.com
+  access-key-id: LTAI5t7qLv45ExE5nFWBqvvM
+  access-key-secret: 2FLeKKiV689GCitcPaeiwewUA6NefM
+  bucket: zhixiang1023
+  public-domain: ${OSS_PUBLIC_DOMAIN:}
+  folder: avatars
