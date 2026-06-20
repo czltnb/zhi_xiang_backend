@@ -1,63 +1,60 @@
 package com.czltnb.zhi_xiang_backend.auth.token;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
+import java.time.Duration;
+import java.util.Objects;
 
 /**
- * 基于 Redis 的 Refresh Token 存储实现。
+ * 基于 Redis 的刷新令牌白名单存储。
+ * <p>
+ * 键空间：{@code auth:rt:{userId}:{tokenId}}，值固定为 "1"，TTL 控制过期。
+ * Redis的String数据类型
  *
- * <p>Key 设计：
- * <ul>
- *   <li>{@code refresh_token:{tokenHash}} → user_id（String），TTL = token 有效期</li>
- *   <li>{@code refresh_token:user:{userId}} → Set&lt;tokenHash&gt;，用于批量吊销</li>
- * </ul>
- * </p>
+ * 特别注意：！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！1
+ * 这个类是RefreshToken 专用会话存储，采用白名单机制必须持久化全部有效 rt；
+ * AccessToken 是短期令牌，仅作废时存入临时黑名单，由拦截器直接处理，不属于该类的管理范围，所以这里只有 rt 的 Redis 键逻辑。
  */
 @Component
-@RequiredArgsConstructor
 public class RedisRefreshTokenStore implements RefreshTokenStore {
 
-    private final StringRedisTemplate redis;
+    private final StringRedisTemplate redisTemplate;
 
-    private static final String TOKEN_PREFIX = "refresh_token:";
-    private static final String USER_PREFIX = "refresh_token:user:";
+    public RedisRefreshTokenStore(StringRedisTemplate redisTemplate) {
+        this.redisTemplate = redisTemplate;
+    }
 
+    //存储RefreshToken
     @Override
-    public void save(String tokenHash, Long userId, long ttlSeconds) {
-        String tokenKey = TOKEN_PREFIX + tokenHash;
-        String userKey = USER_PREFIX + userId;
-        // 1. token -> userId 映射，带过期时间
-        redis.opsForValue().set(tokenKey, String.valueOf(userId), ttlSeconds, TimeUnit.SECONDS);
-        // 2. userId -> 该用户所有token集合（Set）
-        redis.opsForSet().add(userKey, tokenHash);
-        // 3. 给用户token集合也设置相同过期时间
-        redis.expire(userKey, ttlSeconds, TimeUnit.SECONDS);
-        /**
-         * 设计目的：
-         * 单点登录 / 多端登录管理：通过 userKey 这个 Set，可以快速查出某个用户名下所有登录 Token；
-         * 统一过期：用户的 Token 集合和单个 Token 同步过期，避免数据库残留无效关联数据。
-         */
+    public void storeToken(long userId,String tokenId,Duration ttl) {
+        redisTemplate.opsForValue().set(key(userId,tokenId),"1",ttl);
     }
 
     @Override
-    public Optional<Long> findByTokenHash(String tokenHash) {
-        String userId = redis.opsForValue().get(tokenHash);
-        return Optional.ofNullable(userId).map(Long::valueOf);
+    public boolean isTokenValid(long userId,String tokenId) {
+        return Objects.equals("1",redisTemplate.opsForValue().get(key(userId,tokenId)));
     }
 
     @Override
-    public void revokeByUserId(Long userId) {
-        String userKey = USER_PREFIX + userId;
-        Set<String> hashes = redis.opsForSet().members(userKey);
-        if (hashes != null && !hashes.isEmpty()) {
-            hashes.forEach(hash -> redis.delete(TOKEN_PREFIX + hash));
+    public void revokeToken(long userId,String tokenId) {
+        redisTemplate.delete(key(userId,tokenId));
+    }
+
+    /**
+     * 让指定用户名下全部刷新令牌 refreshToken 一次性全部作废，常用于改密码、退出登录、账号冻结场景。
+     * @param userId
+     */
+    @Override
+    public void revokeAll(long userId) {
+        String pattern = "auth:rt:%d:*".formatted(userId); //通配符匹配
+        var keys = redisTemplate.keys(pattern); //redisTemplate.keys() 是 Redis 模糊查询命令 KEYS pattern，把该用户全部 refreshToken 的 key 查出来放到集合。
+        if(!keys.isEmpty()) {
+            redisTemplate.delete(keys);
         }
-        redis.delete(userKey);
+    }
+
+    public static String key(long userId,String tokenId) {
+        return "auth:rt:%d:%s".formatted(userId, tokenId);
     }
 }
-

@@ -56,8 +56,19 @@ logging:
 
 # ==================== Auth（JWT 认证配置） ====================
 auth:
-  issuer: zhiguang
-  access-token-expiration: 900000        # 15 分钟（毫秒）
-  refresh-token-expiration: 604800000    # 7 天（毫秒）
-  public-key-path: classpath:keys/public_key.pem
-  private-key-path: classpath:keys/private_key.pem
+  jwt:
+    issuer: zhiguang
+    access-token-ttl: 15m
+    refresh-token-ttl: 7d
+    key-id: zhiguang-key
+    private-key: classpath:keys/private.pem
+    public-key: classpath:keys/public.pem
+  verification:
+    code-length: 6
+    ttl: 5m
+    send-interval: 60s
+    max-attempts: 5
+    daily-limit: 10
+  password:
+    bcrypt-strength: 12
+    min-length: 8

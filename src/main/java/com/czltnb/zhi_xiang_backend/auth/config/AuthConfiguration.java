@@ -19,12 +19,6 @@ import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 
-/**
- * 认证相关 Bean 配置。
- * <p>
- * - {@code PasswordEncoder}：BCrypt；
- * - {@code JwtEncoder} / {@code JwtDecoder}：基于 RSA 密钥对的 Nimbus 实现。
- */
 @Configuration
 @EnableConfigurationProperties(AuthProperties.class)
 @RequiredArgsConstructor
@@ -32,37 +26,28 @@ public class AuthConfiguration {
 
     private final AuthProperties authProperties;
 
-    /**
-     * BCrypt 密码编码器。
-     */
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder(authProperties.getPassword().getBcryptStrength());
     }
 
-    /**
-     * JWT 编码器 — 用 RSA 私钥签名。
-     * <p>
-     * 通过 JWK 封装密钥对，提供给 NimbusJwtEncoder 使用。
-     */
     @Bean
     public JwtEncoder jwtEncoder() {
-        RSAPrivateKey privateKey = PemUtils.readPrivateKey(authProperties.getPrivateKeyPath());
-        RSAPublicKey publicKey = PemUtils.readPublicKey(authProperties.getPublicKeyPath());
+        AuthProperties.Jwt jwtProps = authProperties.getJwt();
+        RSAPrivateKey privateKey = PemUtils.readPrivateKey(jwtProps.getPrivateKey());
+        RSAPublicKey publicKey = PemUtils.readPublicKey(jwtProps.getPublicKey());
+
         RSAKey jwk = new RSAKey.Builder(publicKey)
                 .privateKey(privateKey)
-                .keyID("zhiguang")
+                .keyID(jwtProps.getKeyId())
                 .build();
         JWKSource<SecurityContext> jwkSource = new ImmutableJWKSet<>(new JWKSet(jwk));
         return new NimbusJwtEncoder(jwkSource);
     }
 
-    /**
-     * JWT 解码器 — 用 RSA 公钥验签。
-     */
     @Bean
     public JwtDecoder jwtDecoder() {
-        RSAPublicKey publicKey = PemUtils.readPublicKey(authProperties.getPublicKeyPath());
+        RSAPublicKey publicKey = PemUtils.readPublicKey(authProperties.getJwt().getPublicKey());
         return NimbusJwtDecoder.withPublicKey(publicKey).build();
     }
 }
