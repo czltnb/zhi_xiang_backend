@@ -44,7 +44,7 @@ spring:
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml
-  type-aliases-package: com.czltnb.zhi_xiang_backend.user.domain,com.czltnb.zhi_xiang_backend.auth.model
+  type-aliases-package: com.czltnb.zhi_xiang_backend.user.domain,com.czltnb.zhi_xiang_backend.auth.model,com.czltnb.zhi_xiang_backend.knowpost.model
   configuration:
     map-underscore-to-camel-case: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
