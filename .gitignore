@@ -14,3 +14,4 @@ target/
 
 # 密钥/本地配置
 application.yml
+application-dev.yml

@@ -75,8 +75,8 @@ auth:
 
 oss:
   endpoint: oss-cn-shanghai.aliyuncs.com
-  access-key-id: LTAI5t7qLv45ExE5nFWBqvvM
-  access-key-secret: 2FLeKKiV689GCitcPaeiwewUA6NefM
+  access-key-id: ${OSS_ACCESS_KEY_ID}
+  access-key-secret: ${OSS_ACCESS_KEY_SECRET}
   bucket: zhixiang1023
   public-domain: ${OSS_PUBLIC_DOMAIN:}
   folder: avatars
