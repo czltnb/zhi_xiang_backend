@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2587d415-68d1-4cef-95b7-73839cd73005" name="Changes" comment="知文模块Step1: 知文相关类CRUD">
+    <list default="true" id="2587d415-68d1-4cef-95b7-73839cd73005" name="Changes" comment="知文模块Step2: 知文相关请求、响应体">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -45,7 +45,7 @@
     "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "Spring Boot.ZhiXiangBackendApplication.executor": "Run",
-    "git-widget-placeholder": "00748442",
+    "git-widget-placeholder": "bf6c73b2",
     "kotlin-language-version-configured": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -84,7 +84,7 @@
       <workItem from="1781624017343" duration="721000" />
       <workItem from="1781931487463" duration="22169000" />
       <workItem from="1782003813964" duration="1381000" />
-      <workItem from="1782307008670" duration="4732000" />
+      <workItem from="1782307008670" duration="6244000" />
     </task>
     <task id="LOCAL-00001" summary="生成指导Markdown文档">
       <option name="closed" value="true" />
@@ -182,7 +182,15 @@
       <option name="project" value="LOCAL" />
       <updated>1782309470212</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="知文模块Step2: 知文相关请求、响应体">
+      <option name="closed" value="true" />
+      <created>1782315064926</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1782315064926</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -213,6 +221,7 @@
     <MESSAGE value="OSS对象存储模块(未测试，需前端联调，且有注释需要放开)" />
     <MESSAGE value="用户资料模块(配置CORS跨域访问，并且修改资料时，从请求头的Token中拿userId)" />
     <MESSAGE value="知文模块Step1: 知文相关类CRUD" />
-    <option name="LAST_COMMIT_MESSAGE" value="知文模块Step1: 知文相关类CRUD" />
+    <MESSAGE value="知文模块Step2: 知文相关请求、响应体" />
+    <option name="LAST_COMMIT_MESSAGE" value="知文模块Step2: 知文相关请求、响应体" />
   </component>
 </project>
