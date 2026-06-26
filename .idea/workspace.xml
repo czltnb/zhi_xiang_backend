@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
+<<<<<<< Updated upstream
     <list default="true" id="2587d415-68d1-4cef-95b7-73839cd73005" name="Changes" comment="知文模块Step2: 知文相关请求、响应体">
+=======
+    <list default="true" id="2587d415-68d1-4cef-95b7-73839cd73005" name="Changes" comment="">
+>>>>>>> Stashed changes
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -12,6 +16,7 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+<<<<<<< Updated upstream
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
@@ -22,6 +27,8 @@
       </list>
     </option>
   </component>
+=======
+>>>>>>> Stashed changes
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -44,8 +51,12 @@
     "RequestMappingsPanelWidth0": "75",
     "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+<<<<<<< Updated upstream
     "Spring Boot.ZhiXiangBackendApplication.executor": "Run",
     "git-widget-placeholder": "bf6c73b2",
+=======
+    "git-widget-placeholder": "e47d9ea0",
+>>>>>>> Stashed changes
     "kotlin-language-version-configured": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
