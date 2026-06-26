@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.czltnb.zhi_xiang_backend.ZhiXiangBackendApplicationTests
--------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 8.824 s -- in com.czltnb.zhi_xiang_backend.ZhiXiangBackendApplicationTests

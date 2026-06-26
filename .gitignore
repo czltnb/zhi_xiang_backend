@@ -1,0 +1,16 @@
+# 编译输出
+target/
+*.class
+*.jar
+*.war
+*.log
+
+# IDE配置
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+
+# 密钥/本地配置
+application.yml
