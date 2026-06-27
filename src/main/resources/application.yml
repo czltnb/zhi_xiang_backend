@@ -80,3 +80,24 @@ oss:
   bucket: zhixiang1023
   public-domain: ${OSS_PUBLIC_DOMAIN:}
   folder: avatars
+
+cache:
+  l2:
+    public-cfg:
+      ttl-seconds: 15
+      max-size: 1000
+    mine-cfg:
+      ttl-seconds: 10
+      max-size: 1000
+    detail-cfg:
+      ttl-seconds: 30
+      max-size: 5000
+  hotkey:
+    window-seconds: 60
+    segment-seconds: 10
+    level-low: 50
+    level-medium: 200
+    level-high: 500
+    extend-low-seconds: 20
+    extend-medium-seconds: 60
+    extend-high-seconds: 120
