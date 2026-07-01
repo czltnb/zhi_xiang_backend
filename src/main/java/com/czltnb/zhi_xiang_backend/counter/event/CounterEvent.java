@@ -6,10 +6,10 @@ import lombok.Data;
 public class CounterEvent {
 
     private String entityType;
-    private String entityId;
+    private String entityId;  // 实体 ID，比如 "123456"
     private String metric;
     private int    idx;
-    private long   userId;
+    private long   userId; // 谁触发了这个操作
     private int    delta;
 
     public CounterEvent(String entityType, String entityId, String metric,
