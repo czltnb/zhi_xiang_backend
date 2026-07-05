@@ -108,6 +108,7 @@ public class CounterServiceImpl implements CounterService {
      * 6. 清理对应聚合桶字段，避免重复折叠
      * 7. 成功后重置退避状态
      */
+    @Override
     public Map<String,Long> getCounts(String entityType,String entityId,List<String> metrics) {
         String sdsKey = CounterKeys.sdsKey(entityType,entityId);
         int expectedLen = CounterSchema.SCHEMA_LEN * CounterSchema.FIELD_SIZE;
@@ -200,6 +201,65 @@ public class CounterServiceImpl implements CounterService {
             }
         }
         return result;
+    }
+
+    /**
+     * 输入:entityType="knowpost",entityIds=["123", "456", "789"](要查的帖子ID列表),metrics=["like","fav"](要查哪些指标)。
+     * 输出:一个"外层key是帖子ID,内层是各指标计数"的嵌套 Map,比如:
+     *
+     * {
+     *   "123": {"like": 128, "fav": 37},
+     *   "456": {"like": 5,   "fav": 0},
+     *   "789": {"like": 0,   "fav": 0}
+     * }
+     */
+    @Override
+    public Map<String,Map<String,Long>> getCountsBatch(String entityType,List<String> entityIds,List<String> metrics) {
+        Map<String, Map<String, Long>> out = new LinkedHashMap<>();
+        if (entityIds == null || entityIds.isEmpty() || metrics == null || metrics.isEmpty()) {
+            return out;
+        }
+
+        //1.把所有帖子ID,统一拼成对应的 Redis key
+        List<String> keys = new ArrayList<>(entityIds.size());
+        for (String eid : entityIds) {
+            keys.add(CounterKeys.sdsKey(entityType,eid));
+        }
+
+        //2.用"管道"一次性批量 GET,而不是循环发3次请求
+        List<Object> raws = redis.executePipelined((RedisCallback<Object>) connect -> {
+            for (String k : keys) {
+                connect.stringCommands().get(k.getBytes(StandardCharsets.UTF_8));
+            }
+            return null;
+        });
+
+        //3.逐个解析每个实体的数据
+        int expctedLen = CounterSchema.SCHEMA_LEN * CounterSchema.FIELD_SIZE;
+        for (int i=0;i<entityIds.size();i++) {
+            String eid = entityIds.get(i);
+            Object rawObj = i < raws.size() ? raws.get(i) : null;
+            byte[] raw = (rawObj instanceof byte[]) ? (byte[]) rawObj : null;
+            //4.每个实体,判断数据是否完整,然后分别处理
+            Map<String,Long> m = new LinkedHashMap<>();
+            if (raw != null && raw.length == expctedLen) {
+                // 情况A:数据正常,正常解析
+                for (String name : metrics) {
+                    Integer idx = CounterSchema.NAME_TO_IDX.get(name);
+                    if(idx == null) continue;
+                    int off = idx * CounterSchema.FIELD_SIZE;
+                    long val = readInt32BE(raw,off);
+                    m.put(name,val);
+                }
+            } else {
+                // 情况B:数据缺失或损坏,补0
+                for (String name : metrics) {
+                    m.put(name, 0L);
+                }
+            }
+            out.put(eid, m);
+        }
+        return out;
     }
 
     private byte[] getRaw(String key) {
