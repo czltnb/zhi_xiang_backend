@@ -96,6 +96,27 @@ public class CounterServiceImpl implements CounterService {
         return ok;
     }
 
+    @Override
+    public boolean isLiked(String entityType,String entityId,long userId) {
+        String key = CounterKeys.bitmapKey("like",entityType,entityId,BitmapShard.chunkOf(userId));
+        long offset = BitmapShard.bitOf(userId);
+        return getBit(key,offset);
+    }
+
+    @Override
+    public boolean isFaved(String entityType,String entityId,long userId) {
+        String key = CounterKeys.bitmapKey("fav",entityType,entityId,BitmapShard.chunkOf(userId));
+        long offset = BitmapShard.bitOf(userId);
+        return getBit(key,offset);
+    }
+
+    private boolean getBit(String key,long offset) {
+        Boolean bit = redis.execute((RedisCallback<Boolean>) connection ->
+            connection.stringCommands().getBit(key.getBytes(StandardCharsets.UTF_8),offset)
+        );
+        return Boolean.TRUE.equals(bit);
+    }
+
     /**
      * 获取实体计数汇总 SDS
      * 若缺失/结构异常，1.会触发基于位图的「事实重建」，2.并「清理」对应聚合字段
