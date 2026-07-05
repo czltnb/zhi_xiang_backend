@@ -11,7 +11,6 @@ spring:
   # 随着模块逐个实现，逐步移除此列表
   autoconfigure:
     exclude:
-      - org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration
       - org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchRestClientAutoConfiguration
       - org.springframework.boot.autoconfigure.mail.MailSenderAutoConfiguration
       - org.springframework.ai.vectorstore.elasticsearch.autoconfigure.ElasticsearchVectorStoreAutoConfiguration
@@ -41,6 +40,13 @@ spring:
       port: 6379
       password: qwe123!@#
 
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      acks: all
+      enable-idempotence: true
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml
@@ -101,7 +107,7 @@ cache:
     extend-low-seconds: 20
     extend-medium-seconds: 60
     extend-high-seconds: 120
-    
+
 counter:
   rebuild:
     lock: #锁相关配置
