@@ -1,5 +1,5 @@
 # ============================================================
-# 智响 (ZhiXiang) 后端 — 应用配置
+# 知享 (ZhiXiang) 后端 — 应用配置
 # 参照源项目结构，仅为本地环境差异做自定义
 # ============================================================
 
@@ -7,21 +7,13 @@ server:
   port: 8080
 
 spring:
+  profiles:
+    active: dev
   # 排除尚未实现模块的自动配置，避免启动报错
   # 随着模块逐个实现，逐步移除此列表
   autoconfigure:
     exclude:
-      - org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchRestClientAutoConfiguration
       - org.springframework.boot.autoconfigure.mail.MailSenderAutoConfiguration
-      - org.springframework.ai.vectorstore.elasticsearch.autoconfigure.ElasticsearchVectorStoreAutoConfiguration
-
-  # Spring AI 占位 API Key（暂未启用 AI 模块，仅用于满足自动配置条件）
-  ai:
-    openai:
-      api-key: placeholder-not-configured
-    deepseek:
-      api-key: placeholder-not-configured
-
   datasource:
     url: jdbc:mysql://localhost:3306/zhiguang?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
     username: root
@@ -33,7 +25,9 @@ spring:
       idle-timeout: 300000
       connection-timeout: 20000
 
-# ==================== Redis ====================
+  elasticsearch:
+    uris: http://localhost:9200
+  # ==================== Redis ====================
   data:
     redis:
       host: localhost
