@@ -12,4 +12,6 @@ public interface KnowPostService {
 
     void updateMetadata(long creatorId,long id,String title,Long tagId,List<String> tags,
                         List<String> imgUrls,String visible,Boolean isTop,String description);
+
+    void publish(long creatorId,long id);
 }

@@ -179,4 +179,27 @@ public class KnowPostServiceImpl implements KnowPostService {
         try { return objectMapper.writeValueAsString(list); }
         catch (JsonProcessingException e) { throw new BusinessException(ErrorCode.BAD_REQUEST, "JSON 处理失败"); }
     }
+
+    @Transactional
+    public void publish(long creatorId,long id) {
+        int updated = mapper.publish(id, creatorId);
+        if (updated == 0) throw new BusinessException(ErrorCode.BAD_REQUEST, "草稿不存在或无权限");
+
+        //1.下游服务：用户计数
+        try {
+            userCounterService.incrementPosts(creatorId,1);
+        } catch (Exception ignored) {}
+
+        //2.下游服务：Outbox
+        try {
+            long outId = idGen.nextId();
+            String payload = objectMapper.writeValueAsString(
+                    Map.of("entity", "knowpost", "op", "upsert", "id", id));
+            outboxMapper.insert(outId, "knowpost", id, "KnowPostPublished", payload);
+        } catch (Exception e) { log.warn("Outbox event after publish failed, post {}: {}", id, e.getMessage()); }
+
+        //3.下游服务：RAG 索引
+        try { ragIndexService.ensureIndexed(id); }
+        catch (Exception e) { log.warn("Pre-index after publish failed, post {}: {}", id, e.getMessage()); }
+    }
 }
