@@ -7,4 +7,6 @@ import java.util.List;
 public interface KnowPostService {
 
     long createDraft(long creatorId);
+
+    void confirmContent(long creatorId,long id,String objectKey,String etag,Long size,String sha256);
 }

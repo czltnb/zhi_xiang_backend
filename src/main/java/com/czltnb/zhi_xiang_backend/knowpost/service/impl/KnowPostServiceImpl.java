@@ -88,7 +88,7 @@ public class KnowPostServiceImpl implements KnowPostService {
         this.outboxMapper       = outboxMapper;
     }
 
-    @Override
+    @Transactional
     public long createDraft(long creatorId) {
         long id = idGen.nextId();
         Instant now = Instant.now();
@@ -104,5 +104,38 @@ public class KnowPostServiceImpl implements KnowPostService {
                 .build();
         mapper.insertDraft(post);
         return id;
+    }
+
+    /**
+     * 注意 updated == 0 这个模式——
+     * mapper.updateContent 的 SQL 里应该带了 WHERE id = ? AND creator_id = ?，
+     * 如果返回影响行数是 0，说明要么这个草稿不存在，要么当前用户不是它的创建者。
+     * 这是一种很省心的"鉴权+存在性检查"合一写法，不用先 SELECT 再判断再 UPDATE，少一次数据库往返。
+     *
+     * 草稿创建之后，前端要先把图片/正文传到对象存储（OSS），拿到 objectKey 再回填。
+     * 这是典型的"先上传、再确认"模式，避免大文件直接走应用服务器：
+     */
+    @Transactional
+    public void confirmContent(long creatorId,long id,String objectKey,String etag,Long size,String sha256) {
+        KnowPost post = KnowPost.builder()
+                .id(id)
+                .creatorId(creatorId)
+                .contentObjectKey(objectKey)
+                .contentEtag(etag)
+                .contentSha256(sha256)
+                .contentUrl(publicUrl(objectKey))
+                .updateTime(Instant.now())
+                .build();
+        int updated = mapper.updateContent(post);
+        if (updated == 0) throw new BusinessException(ErrorCode.BAD_REQUEST, "草稿不存在或无权限");
+    }
+
+    //把 objectKey 拼接成可访问的 URL：
+    private String publicUrl(String objectKey) {
+        String publicDomain = ossProperties.getPublicDomain();
+        if (publicDomain != null && !publicDomain.isBlank()) {
+            return publicDomain.replace("/$","") + "/" + objectKey;
+        }
+        return "https://" + ossProperties.getBucket() + "." + ossProperties.getEndpoint() + "/" + objectKey;
     }
 }
