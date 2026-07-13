@@ -157,6 +157,21 @@ public class KnowPostServiceImpl implements KnowPostService {
                 .build();
         int updated = mapper.updateMetadata(post);
         if (updated == 0) throw new BusinessException(ErrorCode.BAD_REQUEST, "草稿不存在或无权限");
+        /**
+         * 元数据改了之后，谁需要知道？ 假设有搜索索引、推荐系统之类的下游需要感知这个变更。如果直接在这里同步调用下游服务，
+         * 一旦下游慢或挂了，会拖垮这个接口，还可能丢失事件（如果调用失败但数据库已经改了）。
+         *
+         * 这就是引入 Outbox 模式 的动机——把"要发生的事件"和主业务操作放在同一个数据库事务里落地，后续由专门的任务扫表异步投递：
+         * 好像webhook
+         */
+        try {
+            long outId = idGen.nextId();
+            String payload = objectMapper.writeValueAsString(
+                    Map.of("entity", "knowpost", "op", "upsert", "id", id));
+            outboxMapper.insert(outId, "knowpost", id, "KnowPostMetadataUpdated", payload);
+        } catch (Exception e) {
+            log.warn("Outbox event after metadata update failed, post {}: {}", id, e.getMessage());
+        }
     }
 
     private String toJsonOrNull(List<String> list) {
