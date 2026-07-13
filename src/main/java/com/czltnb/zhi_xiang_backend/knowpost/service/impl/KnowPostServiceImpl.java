@@ -138,4 +138,30 @@ public class KnowPostServiceImpl implements KnowPostService {
         }
         return "https://" + ossProperties.getBucket() + "." + ossProperties.getEndpoint() + "/" + objectKey;
     }
+
+    @Transactional
+    public void updateMetadata(long creatorId,long id,String title,Long tagId,List<String> tags,
+                               List<String> imgUrls,String visible,Boolean isTop,String description) {
+        KnowPost post = KnowPost.builder()
+                .id(id)
+                .creatorId(creatorId)
+                .title(title)
+                .tagId(tagId)
+                .tags(toJsonOrNull(tags))
+                .imgUrls(toJsonOrNull(imgUrls))
+                .visible(visible)
+                .isTop(isTop)
+                .description(description)
+                .type("image_text")
+                .updateTime(Instant.now())
+                .build();
+        int updated = mapper.updateMetadata(post);
+        if (updated == 0) throw new BusinessException(ErrorCode.BAD_REQUEST, "草稿不存在或无权限");
+    }
+
+    private String toJsonOrNull(List<String> list) {
+        if (list == null) return null;
+        try { return objectMapper.writeValueAsString(list); }
+        catch (JsonProcessingException e) { throw new BusinessException(ErrorCode.BAD_REQUEST, "JSON 处理失败"); }
+    }
 }
