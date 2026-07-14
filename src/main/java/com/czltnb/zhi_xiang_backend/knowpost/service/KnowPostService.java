@@ -14,4 +14,6 @@ public interface KnowPostService {
                         List<String> imgUrls,String visible,Boolean isTop,String description);
 
     void publish(long creatorId,long id);
+
+    void updateTop(long creatorId,long id,boolean isTop);
 }

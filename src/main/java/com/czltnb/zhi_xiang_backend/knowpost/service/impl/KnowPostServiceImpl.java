@@ -202,4 +202,62 @@ public class KnowPostServiceImpl implements KnowPostService {
         try { ragIndexService.ensureIndexed(id); }
         catch (Exception e) { log.warn("Pre-index after publish failed, post {}: {}", id, e.getMessage()); }
     }
+
+    /**
+     * 双删
+     */
+    @Transactional
+    public void updateTop(long creatorId,long id,boolean isTop) {
+        invalidateCache(id);
+        int updated = mapper.updateTop(id, creatorId, isTop);
+        if (updated == 0) throw new BusinessException(ErrorCode.BAD_REQUEST, "草稿不存在或无权限");
+        invalidateCache(id);
+    }
+
+    /**
+     * 同时清理三层缓存：Redis 详情缓存、本地（Caffeine）详情缓存、Feed 流本地缓存：
+     */
+    private void invalidateCache(long id) {
+        String pageKey = "knowpost:detail:" + id + ":v" + DETAIL_LAYOUT_VER;
+        try { redis.delete(pageKey); }
+        catch (Exception e) { log.warn("Redis 详情缓存删除失败，key={}", pageKey, e); }
+        try { knowPostDetailCache.invalidate(pageKey); }
+        catch (Exception e) { log.warn("本地详情缓存删除失败，key={}", pageKey, e); }
+        try { invalidateFeedLocalCache(id); }
+        catch (Exception e) { log.warn("Feed 本地缓存清理失败，id={}", id, e); }
+    }
+
+    /**
+     * Feed 流的本地缓存分散在很多不同分页 key 上，不能直接靠一个 key 定位，需要一个反向索引
+     */
+    private void invalidateFeedLocalCache(long id) {
+        long hourSlot = System.currentTimeMillis() / 3600000L;
+        // 算出当前是第几个"小时槽"，比如现在是第 486721 个整小时
+
+        for (long slot : List.of(hourSlot,hourSlot-1)) {
+            // 同时检查"这个小时"和"上一个小时"两本账，防止跨小时边界漏查
+
+            String indexKey = "feed:public:index" + id + ":" + slot;
+
+            try {
+                Set<String> pageKeys = redis.opsForSet().members(indexKey);
+                // 查这本账里记了哪些分页 key，比如 {"feed:page:offset=0", "feed:page:hot"}
+
+                if (pageKeys == null || pageKeys.isEmpty()) continue;
+
+                for (String localPageKey : pageKeys) {
+                    if (localPageKey == null || localPageKey.isBlank()) continue;
+
+                    feedPublicCache.invalidate(localPageKey);
+                    // 把这个分页从本地 Caffeine 缓存里删掉——这才是真正的"失效"动作
+
+                    redis.opsForSet().remove(indexKey,localPageKey);
+                    // 顺手把这条记录也从索引账本里划掉，账本自己也要保持干净
+                }
+            } catch (Exception e) {
+                log.warn("Feed 缓存清理异常，indexKey={}", indexKey, e);
+                // 这本账查失败了（比如 Redis 抖动），记个日志，但不影响别的账本继续处理
+            }
+        }
+    }
 }
