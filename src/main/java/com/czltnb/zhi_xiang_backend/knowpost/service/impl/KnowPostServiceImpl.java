@@ -214,6 +214,42 @@ public class KnowPostServiceImpl implements KnowPostService {
         invalidateCache(id);
     }
 
+    @Transactional
+    public void updateVisibility(long creatorId,long id,String visible) {
+        if (!isValidVisible(visible)) throw new BusinessException(ErrorCode.BAD_REQUEST, "可见性取值非法");
+        invalidateCache(id);
+        int updated = mapper.updateVisibility(id, creatorId, visible);
+        if (updated == 0) throw new BusinessException(ErrorCode.BAD_REQUEST, "草稿不存在或无权限");
+        invalidateCache(id);
+    }
+
+    private boolean isValidVisible(String visible) {
+        if (visible == null) return false;
+        return switch (visible) {
+            case "public","followers","school","private","unlisted" -> true;
+            default -> false;
+        };
+    }
+
+    /**
+     * 软删除 + outbox 通知下游同步删除
+     */
+    @Transactional
+    public void delete(long creatorId,long id) {
+        invalidateCache(id);
+        int updated = mapper.softDelete(id,creatorId);
+        if (updated == 0) throw new BusinessException(ErrorCode.BAD_REQUEST, "草稿不存在或无权限");
+        try {
+            long outId = idGen.nextId();
+            String payload = objectMapper.writeValueAsString(
+                    Map.of("entity","knowpost","op","delete","id",id));
+            outboxMapper.insert(outId,"knowpost",id,"KnowPostDeleted",payload);
+        } catch (Exception e) {
+            log.warn("Outbox event after delete failed, post {}: {}", id, e.getMessage());
+        }
+        invalidateCache(id);
+    }
+
     /**
      * 同时清理三层缓存：Redis 详情缓存、本地（Caffeine）详情缓存、Feed 流本地缓存：
      */

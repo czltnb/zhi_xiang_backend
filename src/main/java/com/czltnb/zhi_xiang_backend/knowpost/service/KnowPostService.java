@@ -16,4 +16,8 @@ public interface KnowPostService {
     void publish(long creatorId,long id);
 
     void updateTop(long creatorId,long id,boolean isTop);
+
+    void updateVisibility(long creatorId,long id,String visible);
+
+    void delete(long creatorId,long id);
 }
