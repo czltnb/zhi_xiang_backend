@@ -355,7 +355,10 @@ public class KnowPostServiceImpl implements KnowPostService {
         //查完存回缓存
         try {
             String json = objectMapper.writeValueAsString(resp);
-            redis.opsForValue().set(pageKey,json,Duration.ofSeconds(90));
+            int baseTtl = 60;
+            // 增加随机抖动（Jitter），防止大量缓存同时过期（雪崩）
+            int jitter = ThreadLocalRandom.current().nextInt(30);
+            redis.opsForValue().set(pageKey,json,Duration.ofSeconds(baseTtl + jitter));
         } catch (Exception ignored) {}
 
         return resp;
