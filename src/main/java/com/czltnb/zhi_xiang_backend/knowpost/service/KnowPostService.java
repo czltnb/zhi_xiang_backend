@@ -20,4 +20,6 @@ public interface KnowPostService {
     void updateVisibility(long creatorId,long id,String visible);
 
     void delete(long creatorId,long id);
+
+    KnowPostDetailResponse getDetail(long id, Long currentUserIdNullable);
 }

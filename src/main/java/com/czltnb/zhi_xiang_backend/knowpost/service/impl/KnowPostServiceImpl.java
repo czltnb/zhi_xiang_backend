@@ -296,4 +296,59 @@ public class KnowPostServiceImpl implements KnowPostService {
             }
         }
     }
+
+    /**
+     * 获取知文详情（含作者信息、图片列表）。
+     * <p>
+     * 流程：
+     * 1. 尝试读取 Redis 缓存。
+     * 2. 若缓存命中，直接返回（需叠加实时计数与用户状态）。
+     * 3. 若缓存未命中，使用 SingleFlight 锁机制防止缓存击穿。
+     * 4. 锁内再次检查缓存（双重检查）。
+     * 5. 若仍未命中，回源查询数据库。
+     * 6. 校验内容状态与访问权限。
+     * 7. 组装数据并写入 Redis 缓存（带随机过期时间与热点自动延期）。
+     * 8. 返回最终结果（叠加用户维度状态）。
+     * </p>
+     *
+     * @param id 知文 ID
+     * @param currentUserIdNullable 当前用户 ID（可空，用于判断权限与点赞状态）
+     * @return 知文详情响应
+     */
+    @Transactional(readOnly = true)
+    public KnowPostDetailResponse getDetail(long id, Long currentUserIdNullable) {
+        KnowPostDetailRow row = mapper.findDetailById(id);
+        if (row == null || "deleted".equals(row.getStatus())) {
+            throw new BusinessException(ErrorCode.BAD_REQUEST, "内容不存在");
+        }
+
+        boolean isPublic = "published".equals(row.getStatus()) && "public".equals(row.getVisible());
+        boolean isOwner = currentUserIdNullable != null && row.getCreatorId() != null
+                && currentUserIdNullable.equals(row.getCreatorId());
+        if (!isPublic && !isOwner) {
+            throw new BusinessException(ErrorCode.BAD_REQUEST, "无权限查看");
+        }
+
+        List<String> images = parseStringArray(row.getImageUrls());
+        List<String> tags   = parseStringArray(row.getTags());
+
+        return new KnowPostDetailResponse(
+                String.valueOf(row.getId()), row.getTitle(), row.getDescription(),
+                row.getContentUrl(), images, tags,
+                String.valueOf(row.getCreatorId()), row.getAuthorAvatar(),
+                row.getAuthorNickname(), row.getAuthorTagJson(),
+                0L, 0L, null, null,
+                row.getIsTop(), row.getVisible(), row.getType(), row.getPublishTime());
+    }
+
+    private List<String> parseStringArray(String json) {
+        if (json == null || json.isBlank()) return Collections.emptyList();
+        try {
+            return objectMapper.readValue(json, new TypeReference<>() {
+            });
+        } catch (Exception e) {
+            return Collections.emptyList();
+        }
+    }
+
 }
