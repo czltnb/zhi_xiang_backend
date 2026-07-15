@@ -364,6 +364,25 @@ public class KnowPostServiceImpl implements KnowPostService {
         return resp;
     }
 
+    /**
+     *
+     * 这里"续命"两个 key：详情页缓存本身，还有它在 Feed 流里对应的条目缓存（feed:item:{id}）
+     * ——因为热帖不仅详情页被频繁点，Feed 流里展示它的那条 item 缓存同样承压。
+     */
+    private void recordHotKeyAndExtend(long id,String detailPageKey) {
+        String hotKeyId = "knowpost:" + id;
+        hotKey.record(hotKeyId);
+        int baseTtl = 60, target = hotKey.ttlForPublic(baseTtl,hotKeyId); //hotKey热点探测
+
+        Long detailTtl = redis.getExpire(detailPageKey);
+        if (detailTtl < target) redis.expire(detailPageKey,Duration.ofSeconds(target));
+
+        String itemKey = "feed:item:" + id;
+        Long itemTtl = redis.getExpire(itemKey);
+        if (itemTtl < target) redis.expire(itemKey, Duration.ofSeconds(target));
+
+    }
+
     private List<String> parseStringArray(String json) {
         if (json == null || json.isBlank()) return Collections.emptyList();
         try {
