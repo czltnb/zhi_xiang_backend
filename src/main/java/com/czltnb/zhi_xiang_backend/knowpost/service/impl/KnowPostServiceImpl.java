@@ -317,6 +317,15 @@ public class KnowPostServiceImpl implements KnowPostService {
      */
     @Transactional(readOnly = true)
     public KnowPostDetailResponse getDetail(long id, Long currentUserIdNullable) {
+        String pageKey = "knowpost:detail:" + id + ":v" + DETAIL_LAYOUT_VER;
+
+        String cached = redis.opsForValue().get(pageKey);
+        if (cached != null) {
+            try {
+                return objectMapper.readValue(cached, KnowPostDetailResponse.class);
+            } catch (Exception ignored) { /* 反序列化失败就当没命中，走查库 */}
+        }
+
         KnowPostDetailRow row = mapper.findDetailById(id);
         if (row == null || "deleted".equals(row.getStatus())) {
             throw new BusinessException(ErrorCode.BAD_REQUEST, "内容不存在");
@@ -332,13 +341,21 @@ public class KnowPostServiceImpl implements KnowPostService {
         List<String> images = parseStringArray(row.getImageUrls());
         List<String> tags   = parseStringArray(row.getTags());
 
-        return new KnowPostDetailResponse(
+        KnowPostDetailResponse resp = new KnowPostDetailResponse(
                 String.valueOf(row.getId()), row.getTitle(), row.getDescription(),
                 row.getContentUrl(), images, tags,
                 String.valueOf(row.getCreatorId()), row.getAuthorAvatar(),
                 row.getAuthorNickname(), row.getAuthorTagJson(),
                 0L, 0L, null, null,
                 row.getIsTop(), row.getVisible(), row.getType(), row.getPublishTime());
+
+        //查完存回缓存
+        try {
+            String json = objectMapper.writeValueAsString(resp);
+            redis.opsForValue().set(pageKey,json,Duration.ofSeconds(90));
+        } catch (Exception ignored) {}
+
+        return resp;
     }
 
     private List<String> parseStringArray(String json) {
