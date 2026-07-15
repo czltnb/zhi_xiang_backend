@@ -321,6 +321,7 @@ public class KnowPostServiceImpl implements KnowPostService {
 
         String cached = redis.opsForValue().get(pageKey);
         if (cached != null) {
+            if ("NULL".equals(cached)) throw new BusinessException(ErrorCode.BAD_REQUEST, "内容不存在");
             try {
                 return objectMapper.readValue(cached, KnowPostDetailResponse.class);
             } catch (Exception ignored) { /* 反序列化失败就当没命中，走查库 */}
@@ -328,6 +329,8 @@ public class KnowPostServiceImpl implements KnowPostService {
 
         KnowPostDetailRow row = mapper.findDetailById(id);
         if (row == null || "deleted".equals(row.getStatus())) {
+            redis.opsForValue().set(pageKey, "NULL",
+                    Duration.ofSeconds(30 + ThreadLocalRandom.current().nextInt(31)));
             throw new BusinessException(ErrorCode.BAD_REQUEST, "内容不存在");
         }
 
