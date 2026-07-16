@@ -319,6 +319,14 @@ public class KnowPostServiceImpl implements KnowPostService {
     public KnowPostDetailResponse getDetail(long id, Long currentUserIdNullable) {
         String pageKey = "knowpost:detail:" + id + ":v" + DETAIL_LAYOUT_VER;
 
+        //L1：本地缓存
+        KnowPostDetailResponse local = knowPostDetailCache.getIfPresent(pageKey);
+        if (local != null) {
+            recordHotKeyAndExtendTtl(id, pageKey); //本地缓存触发Redis热点探测
+            return local;
+        }
+
+        //L2：Redis
         String cached = redis.opsForValue().get(pageKey);
         if (cached != null) {
             if ("NULL".equals(cached)) throw new BusinessException(ErrorCode.BAD_REQUEST, "内容不存在");
@@ -365,11 +373,27 @@ public class KnowPostServiceImpl implements KnowPostService {
     }
 
     /**
+     * 把重复的"处理缓存命中"逻辑抽出来
+     * 从 Redis 拿到 JSON → 反序列化 → 处理 NULL 占位 → 回填本地缓存 → 记录热点
+     */
+    private KnowPostDetailResponse tryProcessCacheHit(String cached,long id,String pageKey,Long uid,String sourceLog) {
+        if (cached == null) return null;
+        if ("NULL".equals(cached)) throw new BusinessException(ErrorCode.BAD_REQUEST, "内容不存在");
+        try {
+            KnowPostDetailResponse base = objectMapper.readValue(cached,KnowPostDetailResponse.class);
+            knowPostDetailCache.put(pageKey,base);
+            recordHotKeyAndExtendTtl(id,pageKey);
+            log.info("detail source={} key={}", sourceLog, pageKey);
+            return enrichDetailResponse(base, uid, true);
+        } catch (Exception ignored) { return null; }
+    }
+
+    /**
      *
      * 这里"续命"两个 key：详情页缓存本身，还有它在 Feed 流里对应的条目缓存（feed:item:{id}）
      * ——因为热帖不仅详情页被频繁点，Feed 流里展示它的那条 item 缓存同样承压。
      */
-    private void recordHotKeyAndExtend(long id,String detailPageKey) {
+    private void recordHotKeyAndExtendTtl(long id,String detailPageKey) {
         String hotKeyId = "knowpost:" + id;
         hotKey.record(hotKeyId);
         int baseTtl = 60, target = hotKey.ttlForPublic(baseTtl,hotKeyId); //hotKey热点探测
@@ -393,4 +417,24 @@ public class KnowPostServiceImpl implements KnowPostService {
         }
     }
 
+    /**
+     * "内容主体"（标题、正文、图片）走多级缓存，"个性化/高频变字段"（是否点赞、点赞数）每次单独查
+     */
+    private KnowPostDetailResponse enrichDetailResponse(KnowPostDetailResponse base,Long uid,boolean refreshCounts) {
+        Long likeCount = base.likeCount(), favoriteCount = base.favoriteCount();
+        if (refreshCounts) {
+            Map<String,Long> counts = counterService.getCounts("knowpost",base.id(),List.of("like","fav"));
+            if (counts != null) {
+                likeCount     = counts.getOrDefault("like", likeCount == null ? 0L : likeCount);
+                favoriteCount = counts.getOrDefault("fav",  favoriteCount == null ? 0L : favoriteCount);            }
+        }
+        Boolean liked = uid != null && counterService.isLiked("knowpost", base.id(), uid);
+        Boolean faved = uid != null && counterService.isFaved("knowpost", base.id(), uid);
+        return new KnowPostDetailResponse(
+                base.id(), base.title(), base.description(), base.contentUrl(),
+                base.images(), base.tags(), base.authorId(), base.authorAvatar(),
+                base.authorNickname(), base.authorTagJson(),
+                likeCount, favoriteCount, liked, faved,
+                base.isTop(), base.visible(), base.type(), base.publishTime());
+    }
 }
